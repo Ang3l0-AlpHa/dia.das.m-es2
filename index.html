@@ -105,29 +105,32 @@
         </button>
     </div>
 
-    <script>
-        // Lógica para fazer o botão reproduzir e pausar o vídeo
-        const video = document.getElementById('bg-video');
-        const btn = document.getElementById('play-btn');
-        let isPlaying = false;
+<script>
+    const video = document.getElementById('bg-video');
+    const btn = document.getElementById('play-btn');
+    let isPlaying = false;
 
-        btn.addEventListener('click', () => {
-            if(isPlaying) {
-                video.pause();
-                btn.innerHTML = '<span>▶️</span> Reproduzir Vídeo';
-            } else {
-                video.play();
+    btn.addEventListener('click', () => {
+        // Verificamos se o vídeo existe e está pronto
+        if (video.paused) {
+            video.play().then(() => {
                 btn.innerHTML = '<span>⏸️</span> Pausar Vídeo';
-            }
-            isPlaying = !isPlaying;
-        });
-
-        // Caso o vídeo termine, o botão volta ao estado inicial
-        video.onended = function() {
-            isPlaying = false;
+                isPlaying = true;
+            }).catch(error => {
+                console.log("Erro ao dar play:", error);
+                alert("O vídeo ainda está carregando ou não foi encontrado.");
+            });
+        } else {
+            video.pause();
             btn.innerHTML = '<span>▶️</span> Reproduzir Vídeo';
-        };
-    </script>
+            isPlaying = false;
+        }
+    });
 
+    video.onended = function() {
+        isPlaying = false;
+        btn.innerHTML = '<span>▶️</span> Reproduzir Vídeo';
+    };
+</script>
 </body>
 </html>
